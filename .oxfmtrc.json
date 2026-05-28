@@ -1,17 +1,14 @@
 {
-   "$schema": "./node_modules/oxfmt/configuration_schema.json",
-   "useTabs": true,
-   "singleQuote": true,
-   "jsxSingleQuote": false,
-   "trailingComma": "none",
-   "semi": false,
-   "printWidth": 100,
-   "sortImports": true,
-   "sortTailwindcss": true,
-   "sortPackageJson": true,
-   "insertFinalNewline": false,
-   "ignorePatterns": [
-      "node_modules/**",
-      ".unipi/**"
-   ]
+	"$schema": "./node_modules/oxfmt/configuration_schema.json",
+	"useTabs": true,
+	"singleQuote": true,
+	"jsxSingleQuote": false,
+	"trailingComma": "none",
+	"semi": false,
+	"printWidth": 100,
+	"sortImports": true,
+	"sortTailwindcss": true,
+	"sortPackageJson": true,
+	"insertFinalNewline": false,
+	"ignorePatterns": ["node_modules/**", ".unipi/**"]
 }

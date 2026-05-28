@@ -14,6 +14,9 @@ lint:
 test:
 	pnpm vitest run
 
+# Package-appropriate gate (vitest — no browser/system e2e surface)
+e2e: test
+
 # Validate justfile syntax for all justfiles changed in the staged changes.
 # Exits 0 if all valid, 1 if any justfile has syntax errors.
 lint_just:

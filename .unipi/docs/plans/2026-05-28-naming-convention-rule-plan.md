@@ -37,7 +37,7 @@ Work happens on main branch. Implementation must commit after every completed ta
     5. Record edge-case decisions in implementation comments or test names where useful.
     6. Commit the completed mapping/fixture notes as its own unit.
 
-- in-progress: Task 2 — Add RED tests and missing test recipe
+- completed: Task 2 — Add RED tests and missing test recipe
   - Description: Create `src/naming_convention.test.ts` with failing and passing cases from the spec, and add `just test` first if missing.
   - Dependencies: Task 1
   - Acceptance Criteria: New tests cover bad local value names, bad type/class names, allowed `CONSTANT_CASE` consts, ignored enums, ignored imports, aliased destructuring, ignored JSX attributes, ignored quoted/computed keys, and ignored member access. RED run through `just test` fails because rule is not implemented or not passing yet.
@@ -49,7 +49,7 @@ Work happens on main branch. Implementation must commit after every completed ta
     5. Run `just test` and capture the expected RED failure.
     6. Commit the RED tests and test-recipe addition as their own unit.
 
-- unstarted: Task 3 — Implement `naming_convention` rule
+- completed: Task 3 — Implement `naming_convention` rule
   - Description: Add `src/naming_convention.ts` with metadata, naming predicates, local-name extraction helpers, targeted visitors, and diagnostics.
   - Dependencies: Task 2
   - Acceptance Criteria: Tests from Task 2 pass; rule ignores enums, imports, JSX attributes, quoted/computed keys, external source keys, and member access; helper functions keep AST branching readable and file stays under project LOC guidance.
@@ -62,7 +62,7 @@ Work happens on main branch. Implementation must commit after every completed ta
     6. Re-run focused tests through `just test`.
     7. Commit the passing rule implementation as its own unit.
 
-- unstarted: Task 4 — Wire rule into plugin export
+- completed: Task 4 — Wire rule into plugin export
   - Description: Import `naming_convention` in `src/index.ts` and expose it as `naming-convention` under the `bopstack` plugin rules.
   - Dependencies: Task 3
   - Acceptance Criteria: Build output includes the new rule and existing exported rules remain unchanged.
@@ -72,7 +72,7 @@ Work happens on main branch. Implementation must commit after every completed ta
     3. Run build/check command through `just build`.
     4. Commit the export wiring as its own unit.
 
-- unstarted: Task 5 — Update user-facing docs
+- completed: Task 5 — Update user-facing docs
   - Description: Update `README.md` to list `bopstack/naming-convention` and summarize enforced versus ignored names.
   - Dependencies: Task 4
   - Acceptance Criteria: README includes the new rule in the rule list and documents key behavior: local snake_case values, const CONSTANT_CASE allowance, PascalCase types/classes, enums ignored, imports/external shapes ignored.
@@ -82,7 +82,7 @@ Work happens on main branch. Implementation must commit after every completed ta
     3. Keep docs concise and aligned with existing README tone.
     4. Commit the README update as its own unit.
 
-- unstarted: Task 6 — Add e2e recipe and run full verification gate
+- in-progress: Task 6 — Add e2e recipe and run full verification gate
   - Description: Add `just e2e` if missing, run required project gates, and fix any failures in touched files before handoff.
   - Dependencies: Task 5
   - Acceptance Criteria: Required gates pass through `just`: formatting/lint, build, test, and e2e. If this package has no browser/system e2e surface, `just e2e` should still exist as a documented package-appropriate gate.

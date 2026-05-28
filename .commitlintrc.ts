@@ -1,4 +1,4 @@
-import { RuleConfigSeverity, UserConfig } from '@commitlint/types';
+import { RuleConfigSeverity, UserConfig } from '@commitlint/types'
 
 export default {
 	extends: ['@commitlint/config-conventional'],
@@ -6,4 +6,4 @@ export default {
 		'subject-empty': [RuleConfigSeverity.Error, 'never'] as const,
 		'subject-full-stop': [RuleConfigSeverity.Error, 'never', '.'] as const
 	}
-} satisfies UserConfig;
+} satisfies UserConfig

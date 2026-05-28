@@ -1,9 +1,9 @@
-import { describe, test } from '@effect/vitest';
-import { expectDiagnostics, expectNoDiagnostics, runRule } from 'effect-oxlint/testing';
+import { describe, test } from '@effect/vitest'
+import { expectDiagnostics, expectNoDiagnostics, runRule } from 'effect-oxlint/testing'
 
-import { no_ts_ignore } from './no_ts_ignore.ts';
+import { no_ts_ignore } from './no_ts_ignore.ts'
 
-const TS_IGNORE_DIRECTIVE = '@ts-' + 'ignore';
+const TS_IGNORE_DIRECTIVE = '@ts-' + 'ignore'
 
 describe('no_ts_ignore', () => {
 	test('detects ts ignore comment', () => {
@@ -14,9 +14,9 @@ describe('no_ts_ignore', () => {
 			{
 				sourceText: `const x: any = 1;\n// ${TS_IGNORE_DIRECTIVE}\nconsole.log(x);\n`
 			}
-		);
-		expectDiagnostics(result, [{ message: 'Use @ts-expect-error instead of @ts-ignore.' }]);
-	});
+		)
+		expectDiagnostics(result, [{ message: 'Use @ts-expect-error instead of @ts-ignore.' }])
+	})
 
 	test('does not report @ts-expect-error', () => {
 		const result = runRule(
@@ -26,9 +26,9 @@ describe('no_ts_ignore', () => {
 			{
 				sourceText: 'const x: any = 1;\n// @ts-expect-error\nconsole.log(x);\n'
 			}
-		);
-		expectNoDiagnostics(result);
-	});
+		)
+		expectNoDiagnostics(result)
+	})
 
 	test('does not report non-type-directive comments', () => {
 		const result = runRule(
@@ -38,9 +38,9 @@ describe('no_ts_ignore', () => {
 			{
 				sourceText: 'const x = 1;\nconsole.log(x);\n'
 			}
-		);
-		expectNoDiagnostics(result);
-	});
+		)
+		expectNoDiagnostics(result)
+	})
 
 	test('detects ts ignore even with @ts-expect-error present', () => {
 		const result = runRule(
@@ -50,7 +50,7 @@ describe('no_ts_ignore', () => {
 			{
 				sourceText: `// ${TS_IGNORE_DIRECTIVE}\n// @ts-expect-error\nconst x: any = 1;\n`
 			}
-		);
-		expectDiagnostics(result, [{ message: 'Use @ts-expect-error instead of @ts-ignore.' }]);
-	});
-});
+		)
+		expectDiagnostics(result, [{ message: 'Use @ts-expect-error instead of @ts-ignore.' }])
+	})
+})
