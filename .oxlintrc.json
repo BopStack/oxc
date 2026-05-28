@@ -1,87 +1,67 @@
 {
-   "$schema": "./node_modules/oxlint/configuration_schema.json",
-   "plugins": [
-      "import",
-      "react",
-      "unicorn",
-      "typescript",
-      "oxc"
-   ],
-   "env": {
-      "browser": true,
-      "node": true,
-      "es2022": true
-   },
-   "rules": {
-      "bopstack/no-inline-styles": "error",
-      "bopstack/no-hardcoded-colors": "error",
-      "bopstack/test-naming": "error",
-      "bopstack/no-empty-catch": "error",
-      "bopstack/no-ts-ignore": "error",
-      "eslint/curly": [
-         "error",
-         "all"
-      ],
-      "eqeqeq": "error",
-      "no-eval": "error",
-      "no-debugger": "error",
-      "no-console": "error",
-      "prefer-const": "error",
-      "prefer-optional-chain": "error",
-      "no-nested-ternary": "error",
-      "max-depth": [
-         "error",
-         {
-            "max": 4
-         }
-      ],
-      "max-params": [
-         "error",
-         {
-            "max": 3
-         }
-      ],
-      "max-lines-per-function": [
-         "error",
-         {
-            "max": 80,
-            "skipBlankLines": true
-         }
-      ],
-      "unicorn/filename-case": [
-         "error",
-         {
-            "case": "snakeCase"
-         }
-      ],
-      "unicorn/no-array-for-each": "error",
-      "unicorn/no-useless-undefined": "error",
-      "typescript/no-explicit-any": "error",
-      "typescript/no-unused-vars": "error",
-      "typescript/explicit-function-return-type": "off",
-      "import/no-cycle": "error",
-      "react/jsx-no-target-blank": "error",
-      "react/no-array-index-key": "error"
-   },
-   "overrides": [
-      {
-         "files": [
-            "**/*.test.ts",
-            "**/*.test.tsx",
-            "**/*.spec.ts",
-            "**/*.spec.tsx"
-         ],
-         "rules": {
-            "max-lines-per-function": "off"
-         }
-      }
-   ],
-   "ignorePatterns": [
-      "node_modules",
-      "dist",
-      "build",
-      ".git",
-      "*.d.ts",
-      "tools/oxlint-rules/"
-   ]
+	"$schema": "./node_modules/oxlint/configuration_schema.json",
+	"plugins": ["import", "react", "unicorn", "typescript", "oxc"],
+	"jsPlugins": ["./dist/index.js"],
+	"env": {
+		"browser": true,
+		"node": true,
+		"es2022": true
+	},
+	"rules": {
+		"bopstack/no-inline-styles": "error",
+		"bopstack/no-hardcoded-colors": "error",
+		"bopstack/test-naming": "error",
+		"bopstack/no-empty-catch": "error",
+		"bopstack/no-ts-ignore": "error",
+		"eslint/curly": ["error", "all"],
+		"eqeqeq": "error",
+		"no-eval": "error",
+		"no-debugger": "error",
+		"no-console": "error",
+		"prefer-const": "error",
+		"prefer-optional-chain": "error",
+		"no-nested-ternary": "error",
+		"max-depth": [
+			"error",
+			{
+				"max": 4
+			}
+		],
+		"max-params": [
+			"error",
+			{
+				"max": 3
+			}
+		],
+		"max-lines-per-function": [
+			"error",
+			{
+				"max": 80,
+				"skipBlankLines": true
+			}
+		],
+		"unicorn/filename-case": [
+			"error",
+			{
+				"case": "snakeCase"
+			}
+		],
+		"unicorn/no-array-for-each": "error",
+		"unicorn/no-useless-undefined": "error",
+		"typescript/no-explicit-any": "error",
+		"typescript/no-unused-vars": "error",
+		"typescript/explicit-function-return-type": "off",
+		"import/no-cycle": "error",
+		"react/jsx-no-target-blank": "error",
+		"react/no-array-index-key": "error"
+	},
+	"overrides": [
+		{
+			"files": ["**/*.test.ts", "**/*.test.tsx", "**/*.spec.ts", "**/*.spec.tsx"],
+			"rules": {
+				"max-lines-per-function": "off"
+			}
+		}
+	],
+	"ignorePatterns": ["node_modules", "dist", "build", ".git", "*.d.ts", "tools/oxlint-rules/"]
 }

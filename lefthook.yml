@@ -1,0 +1,28 @@
+pre-commit:
+  parallel: true
+  commands:
+    lint:
+      glob: '*.{js,ts,tsx,jsx,mjs,cjs}'
+      run: just lint
+    secretlint:
+      run: pnpm secretlint --no-glob {staged_files}
+    # just_validate:
+    #   glob: "{*.just,justfile}"
+    #   run: just just_validate
+
+commit-msg:
+  commands:
+    commitlint:
+      run: pnpm commitlint --edit {1}
+    # coauthor_check:
+    #   run: bash .just/scripts/check_coauthor.sh {1}
+
+pre-push:
+  parallel: false
+  commands:
+    check:
+      run: just check
+
+output:
+  - summary
+  - failure

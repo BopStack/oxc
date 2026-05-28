@@ -9,7 +9,9 @@ const css_color_fn_re = /^(rgb|rgba|hsl|hsla)\(/i;
 const meta = Rule.meta({ type: 'suggestion', description: MESSAGE });
 
 function is_hardcoded_color(value: unknown): boolean {
-	if (typeof value !== 'string') return false;
+	if (typeof value !== 'string') {
+		return false;
+	}
 	return hex_color_re.test(value) || css_color_fn_re.test(value);
 }
 
@@ -19,7 +21,9 @@ export const no_hardcoded_colors = Rule.define({
 	create: function* () {
 		const ctx = yield* RuleContext;
 		return Visitor.on('Literal', (node: { readonly value: unknown }) => {
-			if (!is_hardcoded_color(node.value)) return Effect.void;
+			if (!is_hardcoded_color(node.value)) {
+				return Effect.void;
+			}
 			return ctx.report(Diagnostic.make({ node: node as unknown as Ranged, message: MESSAGE }));
 		});
 	}

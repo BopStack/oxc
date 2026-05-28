@@ -13,7 +13,9 @@ export const test_naming = Rule.define({
 	create: function* () {
 		const ctx = yield* RuleContext;
 		return Visitor.on('Program', (node: ESTree.Program) => {
-			if (!spec_re.test(ctx.filename)) return Effect.void;
+			if (!spec_re.test(ctx.filename)) {
+				return Effect.void;
+			}
 			return ctx.report(Diagnostic.make({ node: node as unknown as Ranged, message }));
 		});
 	}

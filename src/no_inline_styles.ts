@@ -21,8 +21,12 @@ function is_style_attribute(node: ESTree.JSXAttribute): boolean {
 }
 
 function has_object_expression(value: NonNullable<ESTree.JSXAttribute['value']>): boolean {
-	if (typeof value !== 'object' || !('type' in value)) return false;
-	if (value.type !== 'JSXExpressionContainer') return false;
+	if (typeof value !== 'object' || !('type' in value)) {
+		return false;
+	}
+	if (value.type !== 'JSXExpressionContainer') {
+		return false;
+	}
 	const expr = (value as ESTree.JSXExpressionContainer).expression;
 	return (
 		expr !== null &&
@@ -38,8 +42,12 @@ export const no_inline_styles = Rule.define({
 	create: function* () {
 		const ctx = yield* RuleContext;
 		return Visitor.on('JSXAttribute', (node: ESTree.JSXAttribute) => {
-			if (!is_style_attribute(node)) return Effect.void;
-			if (!has_object_expression(node.value!)) return Effect.void;
+			if (!is_style_attribute(node)) {
+				return Effect.void;
+			}
+			if (!has_object_expression(node.value!)) {
+				return Effect.void;
+			}
 			return ctx.report(Diagnostic.make({ node: node as unknown as Ranged, message: MESSAGE }));
 		});
 	}

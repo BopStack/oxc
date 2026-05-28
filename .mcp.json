@@ -1,115 +1,68 @@
 {
-  "mcpServers": {
-    "playwright": {
-      "type": "stdio",
-      "command": "npx",
-      "enabled": true,
-      "args": [
-        "-y",
-        "@playwright/mcp@latest",
-        "--ignore-https-errors"
-      ],
-      "tags": [
-        "browser",
-        "automation",
-        "testing"
-      ]
-    },
-    "context7": {
-      "type": "http",
-      "url": "https://mcp.context7.com/mcp",
-      "tags": [
-        "context7",
-        "search",
-        "docs"
-      ],
-      "directTools": true
-    },
-    "exa": {
-      "type": "http",
-      "url": "https://mcp.exa.ai/mcp?tools=web_search_exa,get_code_context_exa,company_research_exa,deep_researcher_check,deep_researcher_start,people_search_exa,web_search_advanced_exa",
-      "tags": [
-        "exa",
-        "search"
-      ],
-      "directTools": false
-    },
-    "read_website_fast": {
-      "type": "stdio",
-      "directTools": true,
-      "command": "npx",
-      "args": [
-        "-y",
-        "@just-every/mcp-read-website-fast"
-      ],
-      "tags": [
-        "read_website_fast",
-        "crawler",
-        "markdown"
-      ]
-    },
-    "tavily": {
-      "type": "http",
-      "url": "https://mcp.tavily.com/mcp/?tavilyApiKey=${TAVILY_API_KEY}",
-      "tags": [
-        "tavily",
-        "search"
-      ],
-      "directTools": false
-    },
-    "gh_grep": {
-      "type": "http",
-      "url": "https://mcp.grep.app",
-      "tags": [
-        "search",
-        "code"
-      ],
-      "directTools": true
-    },
-    "backlog": {
-      "type": "stdio",
-      "command": "backlog",
-      "args": [
-        "mcp",
-        "start"
-      ],
-      "directTools": true
-    },
-    "omniroute": {
-      "type": "http",
-      "url": "http://localhost:20128/api/mcp/stream",
-      "bearerTokenEnv": "OMNIROUTE_API_TOKEN",
-      "directTools": [
-        "omniroute_web_search"
-      ]
-    },
-    "cortex": {
-      "type": "stdio",
-      "command": "npx",
-      "args": [
-        "@cortexmem/mcp",
-        "--server-url",
-        "http://localhost:21100"
-      ],
-      "tags": [
-        "memory",
-        "persistent"
-      ],
-      "directTools": true
-    },
-    "codegraph": {
-      "type": "stdio",
-      "command": "codegraph",
-      "args": [
-        "serve",
-        "--mcp"
-      ],
-      "tags": [
-        "code",
-        "search",
-        "graph"
-      ],
-      "directTools": true
-    }
-  }
+	"mcpServers": {
+		"playwright": {
+			"type": "stdio",
+			"command": "npx",
+			"enabled": true,
+			"args": ["-y", "@playwright/mcp@latest", "--ignore-https-errors"],
+			"tags": ["browser", "automation", "testing"]
+		},
+		"context7": {
+			"type": "http",
+			"url": "https://mcp.context7.com/mcp",
+			"tags": ["context7", "search", "docs"],
+			"directTools": true
+		},
+		"exa": {
+			"type": "http",
+			"url": "https://mcp.exa.ai/mcp?tools=web_search_exa,get_code_context_exa,company_research_exa,deep_researcher_check,deep_researcher_start,people_search_exa,web_search_advanced_exa",
+			"tags": ["exa", "search"],
+			"directTools": false
+		},
+		"read_website_fast": {
+			"type": "stdio",
+			"directTools": true,
+			"command": "npx",
+			"args": ["-y", "@just-every/mcp-read-website-fast"],
+			"tags": ["read_website_fast", "crawler", "markdown"]
+		},
+		"tavily": {
+			"type": "http",
+			"url": "https://mcp.tavily.com/mcp/?tavilyApiKey=${TAVILY_API_KEY}",
+			"tags": ["tavily", "search"],
+			"directTools": false
+		},
+		"gh_grep": {
+			"type": "http",
+			"url": "https://mcp.grep.app",
+			"tags": ["search", "code"],
+			"directTools": true
+		},
+		"backlog": {
+			"type": "stdio",
+			"command": "backlog",
+			"args": ["mcp", "start"],
+			"directTools": true
+		},
+		"omniroute": {
+			"type": "http",
+			"url": "http://localhost:20128/api/mcp/stream",
+			"bearerTokenEnv": "OMNIROUTE_API_TOKEN",
+			"directTools": ["omniroute_web_search"]
+		},
+		"cortex": {
+			"type": "stdio",
+			"command": "npx",
+			"args": ["@cortexmem/mcp", "--server-url", "http://localhost:21100"],
+			"tags": ["memory", "persistent"],
+			"directTools": true
+		},
+		"codegraph": {
+			"type": "stdio",
+			"command": "codegraph",
+			"args": ["serve", "--mcp"],
+			"tags": ["code", "search", "graph"],
+			"directTools": true
+		}
+	}
 }

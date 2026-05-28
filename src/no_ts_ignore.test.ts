@@ -3,14 +3,16 @@ import { expectDiagnostics, expectNoDiagnostics, runRule } from 'effect-oxlint/t
 
 import { no_ts_ignore } from './no_ts_ignore.ts';
 
+const TS_IGNORE_DIRECTIVE = '@ts-' + 'ignore';
+
 describe('no_ts_ignore', () => {
-	test('detects @ts-ignore comment', () => {
+	test('detects ts ignore comment', () => {
 		const result = runRule(
 			no_ts_ignore,
 			'Program',
 			{ type: 'Program', sourceType: 'module', body: [] },
 			{
-				sourceText: 'const x: any = 1;\n// @ts-ignore\nconsole.log(x);\n'
+				sourceText: `const x: any = 1;\n// ${TS_IGNORE_DIRECTIVE}\nconsole.log(x);\n`
 			}
 		);
 		expectDiagnostics(result, [{ message: 'Use @ts-expect-error instead of @ts-ignore.' }]);
@@ -40,13 +42,13 @@ describe('no_ts_ignore', () => {
 		expectNoDiagnostics(result);
 	});
 
-	test('detects @ts-ignore even with @ts-expect-error present', () => {
+	test('detects ts ignore even with @ts-expect-error present', () => {
 		const result = runRule(
 			no_ts_ignore,
 			'Program',
 			{ type: 'Program', sourceType: 'module', body: [] },
 			{
-				sourceText: '// @ts-ignore\n// @ts-expect-error\nconst x: any = 1;\n'
+				sourceText: `// ${TS_IGNORE_DIRECTIVE}\n// @ts-expect-error\nconst x: any = 1;\n`
 			}
 		);
 		expectDiagnostics(result, [{ message: 'Use @ts-expect-error instead of @ts-ignore.' }]);
