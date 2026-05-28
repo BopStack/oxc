@@ -6,6 +6,7 @@ Oxlint plugin for Bopstack project conventions.
 
 This package exposes the `bopstack` oxlint plugin with rules for common code-quality and frontend consistency problems:
 
+- `bopstack/naming-convention` — enforce Bopstack naming: `snake_case` for value names, `snake_case` or `CONSTANT_CASE` for `const`, `PascalCase` for types/classes. Imports, enums, JSX attributes, member access, and quoted/computed keys are ignored so external API shapes do not create false positives.
 - `bopstack/no-inline-styles` — report JSX `style={{ ... }}` attributes.
 - `bopstack/no-hardcoded-colors` — report literal hex, `rgb()`, `rgba()`, `hsl()`, and `hsla()` colors.
 - `bopstack/test-naming` — require `.test.ts` naming instead of `.spec.ts`.
