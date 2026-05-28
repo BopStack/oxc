@@ -25,7 +25,7 @@ Work happens on main branch. Implementation must commit after every completed ta
 
 ## Tasks
 
-- unstarted: Task 1 — Map AST fixtures and rule shape
+- in-progress: Task 1 — Map AST fixtures and rule shape
   - Description: Confirm exact ESTree/Oxlint node shapes needed for value declarations, destructuring, object/class members, and TypeScript declarations before writing the rule.
   - Dependencies: None
   - Acceptance Criteria: Implementation notes identify which visitor node types and fields will be used, including explicit choices to ignore enums completely, ignore computed/quoted keys, enforce declared identifier member keys only, and ignore JSX attributes.
