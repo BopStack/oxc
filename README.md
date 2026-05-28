@@ -26,7 +26,9 @@ Run the available checks through `just`:
 ```sh
 just lint
 just format
+just typecheck
 just build
+just test
 ```
 
 ## Build output
