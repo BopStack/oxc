@@ -103,11 +103,11 @@ Dependency chain: Task 1 → Task 2 → Task 3 → Task 4 → Task 5 → Task 6.
 
 Each completed task/unit gets its own focused commit.
 
-## Risks
+## Resolved Controls
 
-- Oxlint/ESTree node shapes for TypeScript declarations may differ from assumptions; mitigate by inspecting typings and adding focused tests per node kind.
-- Broad property enforcement can create false positives for APIs; mitigate by checking only local declarations, declared identifier member keys, and ignoring member access/source destructuring keys.
-- Missing `just test` and `just e2e` recipes are resolved by adding recipes before relying on those gates.
-- Enums are intentionally ignored completely in v1, including enum declarations and enum members.
-- JSX attributes are intentionally ignored in v1; prop naming is enforced only through local type/value declarations when applicable.
-- Each completed task/unit must be committed separately with a focused Conventional Commit.
+- AST uncertainty is handled in Task 1 before implementation by inspecting typings and recording exact visitor/node choices.
+- Property false positives are avoided by enforcing only local declarations and declared identifier member keys, while ignoring member access and source-side destructuring keys.
+- Missing `just test` and `just e2e` recipes are handled as implementation tasks before those gates are used.
+- Enums are intentionally out of scope for v1: enum declarations and enum members are ignored.
+- JSX attributes are intentionally out of scope for v1; prop naming is enforced only through ordinary local type/value declarations.
+- Commit cadence is explicit: each completed task/unit gets a focused Conventional Commit.
