@@ -1,0 +1,4 @@
+[tools]
+just = "latest"
+lefthook = "latest"
+node = "lts"

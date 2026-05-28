@@ -1,0 +1,9 @@
+{
+	"useTabs": true,
+	"singleQuote": true,
+	"jsxSingleQuote": false,
+	"trailingComma": "none",
+	"semi": true,
+	"printWidth": 100,
+	"ignorePatterns": ["node_modules/**", ".unipi/**"]
+}
