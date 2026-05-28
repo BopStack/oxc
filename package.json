@@ -8,6 +8,7 @@
 	"type": "module",
 	"main": "dist/index.js",
 	"devDependencies": {
+		"@commitlint/types": "^21.0.1",
 		"@effect/vitest": "4.0.0-beta.70",
 		"@oxlint/plugins": "^1.66.0",
 		"effect": "4.0.0-beta.70",
