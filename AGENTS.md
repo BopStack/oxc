@@ -6,6 +6,10 @@ contact: "Bruno (brunodepaula.pro@gmail.com)"
 call_me: bop
 memory: cortex
 
+SessionNaming {
+always set concise descriptive Pi session name near session start
+}
+
 LocalHardRules {
 use just, not raw tsc/biome/vitest
 use absolute paths

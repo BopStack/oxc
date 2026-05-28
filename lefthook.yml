@@ -6,16 +6,16 @@ pre-commit:
       run: just lint
     secretlint:
       run: pnpm secretlint --no-glob {staged_files}
-    # just_validate:
-    #   glob: "{*.just,justfile}"
-    #   run: just just_validate
+    just_validate:
+      glob: '{*.just,justfile}'
+      run: just lint_just
 
 commit-msg:
   commands:
     commitlint:
       run: pnpm commitlint --edit {1}
-    # coauthor_check:
-    #   run: bash .just/scripts/check_coauthor.sh {1}
+    coauthor_check:
+      run: just lint_no_coauthor {1}
 
 pre-push:
   parallel: false
