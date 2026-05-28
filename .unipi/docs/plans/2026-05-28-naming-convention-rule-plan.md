@@ -82,7 +82,7 @@ Work happens on main branch. Implementation must commit after every completed ta
     3. Keep docs concise and aligned with existing README tone.
     4. Commit the README update as its own unit.
 
-- in-progress: Task 6 — Add e2e recipe and run full verification gate
+- completed: Task 6 — Add e2e recipe and run full verification gate
   - Description: Add `just e2e` if missing, run required project gates, and fix any failures in touched files before handoff.
   - Dependencies: Task 5
   - Acceptance Criteria: Required gates pass through `just`: formatting/lint, build, test, and e2e. If this package has no browser/system e2e surface, `just e2e` should still exist as a documented package-appropriate gate.

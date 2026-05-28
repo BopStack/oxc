@@ -14,9 +14,9 @@ Build `bopstack/naming-convention` rule for effect-oxlint. Enforces snake_case v
 Task 1 → Task 2 → Task 3 → Task 4 → Task 5 → Task 6
 
 ## Checklist
-- [ ] Task 1 — Map AST fixtures and rule shape
-- [ ] Task 2 — Add RED tests and missing test recipe
-- [ ] Task 3 — Implement naming_convention rule
-- [ ] Task 4 — Wire rule into plugin export
-- [ ] Task 5 — Update user-facing docs
-- [ ] Task 6 — Add e2e recipe and run full verification gate
+- [x] Task 1 — Map AST fixtures and rule shape
+- [x] Task 2 — Add RED tests and missing test recipe
+- [x] Task 3 — Implement naming_convention rule
+- [x] Task 4 — Wire rule into plugin export
+- [x] Task 5 — Update user-facing docs
+- [x] Task 6 — Add e2e recipe and run full verification gate
