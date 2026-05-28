@@ -10,6 +10,10 @@ format:
 lint:
 	pnpm oxlint
 
+# Run vitest tests
+test:
+	pnpm vitest run
+
 # Validate justfile syntax for all justfiles changed in the staged changes.
 # Exits 0 if all valid, 1 if any justfile has syntax errors.
 lint_just:

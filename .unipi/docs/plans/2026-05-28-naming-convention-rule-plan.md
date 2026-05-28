@@ -25,7 +25,7 @@ Work happens on main branch. Implementation must commit after every completed ta
 
 ## Tasks
 
-- in-progress: Task 1 — Map AST fixtures and rule shape
+- completed: Task 1 — Map AST fixtures and rule shape
   - Description: Confirm exact ESTree/Oxlint node shapes needed for value declarations, destructuring, object/class members, and TypeScript declarations before writing the rule.
   - Dependencies: None
   - Acceptance Criteria: Implementation notes identify which visitor node types and fields will be used, including explicit choices to ignore enums completely, ignore computed/quoted keys, enforce declared identifier member keys only, and ignore JSX attributes.
@@ -37,7 +37,7 @@ Work happens on main branch. Implementation must commit after every completed ta
     5. Record edge-case decisions in implementation comments or test names where useful.
     6. Commit the completed mapping/fixture notes as its own unit.
 
-- unstarted: Task 2 — Add RED tests and missing test recipe
+- in-progress: Task 2 — Add RED tests and missing test recipe
   - Description: Create `src/naming_convention.test.ts` with failing and passing cases from the spec, and add `just test` first if missing.
   - Dependencies: Task 1
   - Acceptance Criteria: New tests cover bad local value names, bad type/class names, allowed `CONSTANT_CASE` consts, ignored enums, ignored imports, aliased destructuring, ignored JSX attributes, ignored quoted/computed keys, and ignored member access. RED run through `just test` fails because rule is not implemented or not passing yet.
