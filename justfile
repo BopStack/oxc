@@ -10,6 +10,10 @@ format:
 lint:
 	pnpm oxlint
 
+# Run TypeScript type-checking
+typecheck:
+	pnpm tsc --noEmit
+
 # Run vitest tests
 test:
 	pnpm vitest run

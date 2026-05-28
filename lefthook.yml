@@ -1,6 +1,9 @@
 pre-commit:
   parallel: true
   commands:
+    typecheck:
+      glob: '*.{ts,tsx,mts,cts}'
+      run: just typecheck
     lint:
       glob: '*.{js,ts,tsx,jsx,mjs,cjs}'
       run: just lint

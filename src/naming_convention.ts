@@ -40,15 +40,9 @@ function is_pascal_case(name: string): boolean {
 }
 
 // ---------------------------------------------------------------------------
-// Binding name extraction helpers
-//
-// Uses plain JS array operations (not Effect's Arr) because
-// Effect v4 beta has a different API for filterMap etc.
+// Binding name extraction (stateless — no ctx dependency)
 // ---------------------------------------------------------------------------
 
-/**
- * Collect all binding names from a BindingPattern recursively.
- */
 function collect_binding_names(pattern: ESTree.BindingPattern): ReadonlyArray<string> {
 	if (pattern.type === 'Identifier') {
 		return [pattern.name]
@@ -65,7 +59,6 @@ function collect_binding_names(pattern: ESTree.BindingPattern): ReadonlyArray<st
 				)
 			}
 			if (prop.type === 'Property') {
-				// BindingProperty: check the value (local binding), ignore the source key
 				result.push(
 					...collect_binding_names((prop as unknown as { value: ESTree.BindingPattern }).value)
 				)
@@ -98,7 +91,6 @@ function collect_binding_names(pattern: ESTree.BindingPattern): ReadonlyArray<st
 	return []
 }
 
-/** Extract identifier-keyed Property names from an ObjectExpression, ignoring computed and quoted keys. */
 function extract_local_property_names(
 	obj: ESTree.ObjectExpression
 ): ReadonlyArray<{ readonly name: string; readonly node: ESTree.Node }> {
@@ -119,134 +111,93 @@ function extract_local_property_names(
 }
 
 // ---------------------------------------------------------------------------
-// Report helpers
+// Effect-reducing helper
 // ---------------------------------------------------------------------------
 
-function report(ctx: RuleContext, node: ESTree.Node, message: string): Effect.Effect<void> {
-	return ctx.report(Diagnostic.make({ node: node as unknown as Ranged, message }))
-}
-
-function report_value(ctx: RuleContext, name: string, node: ESTree.Node): Effect.Effect<void> {
-	if (!is_snake_case(name)) {
-		return report(ctx, node, VALUE_MESSAGE)
+function chain_all(effects: ReadonlyArray<Effect.Effect<void>>): Effect.Effect<void> {
+	let acc: Effect.Effect<void> = Effect.void
+	for (const e of effects) {
+		acc = Effect.andThen(acc, () => e)
 	}
-	return Effect.void
-}
-
-function report_const(ctx: RuleContext, name: string, node: ESTree.Node): Effect.Effect<void> {
-	if (!is_snake_case(name) && !is_constant_case(name)) {
-		return report(ctx, node, CONST_MESSAGE)
-	}
-	return Effect.void
-}
-
-function report_type(ctx: RuleContext, name: string, node: ESTree.Node): Effect.Effect<void> {
-	if (!is_pascal_case(name)) {
-		return report(ctx, node, TYPE_MESSAGE)
-	}
-	return Effect.void
+	return acc
 }
 
 // ---------------------------------------------------------------------------
-// Visitor helpers
+// Visitor factories — accept check closures to avoid ctx type issues
 // ---------------------------------------------------------------------------
 
-function check_binding_id(
-	ctx: RuleContext,
-	id: ESTree.BindingIdentifier | null,
-	fn: (ctx: RuleContext, name: string, node: ESTree.Node) => Effect.Effect<void>
-): Effect.Effect<void> {
-	if (id === null) {
-		return Effect.void
-	}
-	return fn(ctx, id.name, id as unknown as ESTree.Node)
-}
+type CheckFn = (name: string, node: ESTree.Node) => Effect.Effect<void>
 
-// ---------------------------------------------------------------------------
-// Visitor factory functions (kept separate to keep `create` under line limit)
-// ---------------------------------------------------------------------------
-
-function variable_visitor(ctx: RuleContext): ReturnType<typeof Visitor.on> {
+function make_variable_visitor(check_value: CheckFn, check_const: CheckFn) {
 	return Visitor.on(
 		'VariableDeclaration',
 		(node: ESTree.VariableDeclaration): Effect.Effect<void> => {
-			const check_fn = node.kind === 'const' ? report_const : report_value
-			let acc: Effect.Effect<void> = Effect.void
-			for (const decl of node.declarations) {
-				const names = collect_binding_names(decl.id)
-				for (const name of names) {
-					acc = Effect.andThen(acc, () => check_fn(ctx, name, decl.id as unknown as ESTree.Node))
-				}
-			}
-			return acc
+			const check_fn = node.kind === 'const' ? check_const : check_value
+			return chain_all(
+				node.declarations.flatMap((decl) =>
+					collect_binding_names(decl.id).map((name) =>
+						check_fn(name, decl.id as unknown as ESTree.Node)
+					)
+				)
+			)
 		}
 	)
 }
 
-function param_visitor(ctx: RuleContext): ReturnType<typeof Visitor.on> {
+function make_function_visitor(check_value: CheckFn) {
+	return Visitor.on(
+		'FunctionDeclaration',
+		(node: ESTree.Function): Effect.Effect<void> =>
+			node.id === null ? Effect.void : check_value(node.id.name, node.id as unknown as ESTree.Node)
+	)
+}
+
+function make_param_visitor(check_value: CheckFn) {
 	return Visitor.on(
 		'ArrowFunctionExpression',
-		(node: ESTree.ArrowFunctionExpression): Effect.Effect<void> => {
-			let acc: Effect.Effect<void> = Effect.void
-			for (const param of node.params) {
-				const pattern =
-					'parameter' in param ? (param as ESTree.TSParameterProperty).parameter : param
-				const names = collect_binding_names(pattern as ESTree.BindingPattern)
-				for (const name of names) {
-					acc = Effect.andThen(acc, () => report_value(ctx, name, param as unknown as ESTree.Node))
-				}
-			}
-			return acc
-		}
+		(node: ESTree.ArrowFunctionExpression): Effect.Effect<void> =>
+			chain_all(
+				node.params.flatMap((param) => {
+					const pattern =
+						'parameter' in param ? (param as ESTree.TSParameterProperty).parameter : param
+					return collect_binding_names(pattern as ESTree.BindingPattern).map((name) =>
+						check_value(name, param as unknown as ESTree.Node)
+					)
+				})
+			)
 	)
 }
 
-function catch_visitor(ctx: RuleContext): ReturnType<typeof Visitor.on> {
+function make_catch_visitor(check_value: CheckFn) {
 	return Visitor.on('CatchClause', (node: ESTree.CatchClause): Effect.Effect<void> => {
 		if (node.param === null) {
 			return Effect.void
 		}
-		let acc: Effect.Effect<void> = Effect.void
-		const names = collect_binding_names(node.param)
-		for (const name of names) {
-			acc = Effect.andThen(acc, () => report_value(ctx, name, node.param as unknown as ESTree.Node))
-		}
-		return acc
+		return chain_all(
+			collect_binding_names(node.param).map((name) =>
+				check_value(name, node.param as unknown as ESTree.Node)
+			)
+		)
 	})
 }
 
-function object_prop_visitor(ctx: RuleContext): ReturnType<typeof Visitor.on> {
-	return Visitor.on('ObjectExpression', (node: ESTree.ObjectExpression): Effect.Effect<void> => {
-		const props = extract_local_property_names(node)
-		let acc: Effect.Effect<void> = Effect.void
-		for (const { name, node: prop_node } of props) {
-			acc = Effect.andThen(acc, () => report_value(ctx, name, prop_node))
-		}
-		return acc
-	})
-}
-
-function type_alias_visitor(ctx: RuleContext): ReturnType<typeof Visitor.on> {
+function make_object_prop_visitor(check_value: CheckFn) {
 	return Visitor.on(
-		'TSTypeAliasDeclaration',
-		(node: ESTree.TSTypeAliasDeclaration): Effect.Effect<void> => {
-			if (!is_pascal_case(node.id.name)) {
-				return report(ctx, node as unknown as ESTree.Node, TYPE_MESSAGE)
-			}
-			return Effect.void
-		}
+		'ObjectExpression',
+		(node: ESTree.ObjectExpression): Effect.Effect<void> =>
+			chain_all(
+				extract_local_property_names(node).map(({ name, node: prop_node }) =>
+					check_value(name, prop_node)
+				)
+			)
 	)
 }
 
-function interface_visitor(ctx: RuleContext): ReturnType<typeof Visitor.on> {
+function make_class_visitor(check_type: CheckFn) {
 	return Visitor.on(
-		'TSInterfaceDeclaration',
-		(node: ESTree.TSInterfaceDeclaration): Effect.Effect<void> => {
-			if (!is_pascal_case(node.id.name)) {
-				return report(ctx, node as unknown as ESTree.Node, TYPE_MESSAGE)
-			}
-			return Effect.void
-		}
+		'ClassDeclaration',
+		(node: ESTree.Class): Effect.Effect<void> =>
+			node.id === null ? Effect.void : check_type(node.id.name, node.id as unknown as ESTree.Node)
 	)
 }
 
@@ -260,23 +211,60 @@ export const naming_convention = Rule.define({
 	create: function* () {
 		const ctx = yield* RuleContext
 
+		const check_value = (name: string, node: ESTree.Node): Effect.Effect<void> => {
+			if (!is_snake_case(name)) {
+				return ctx.report(
+					Diagnostic.make({ node: node as unknown as Ranged, message: VALUE_MESSAGE })
+				)
+			}
+			return Effect.void
+		}
+
+		const check_const = (name: string, node: ESTree.Node): Effect.Effect<void> => {
+			if (!is_snake_case(name) && !is_constant_case(name)) {
+				return ctx.report(
+					Diagnostic.make({ node: node as unknown as Ranged, message: CONST_MESSAGE })
+				)
+			}
+			return Effect.void
+		}
+
+		const check_type = (name: string, node: ESTree.Node): Effect.Effect<void> => {
+			if (!is_pascal_case(name)) {
+				return ctx.report(
+					Diagnostic.make({ node: node as unknown as Ranged, message: TYPE_MESSAGE })
+				)
+			}
+			return Effect.void
+		}
+
 		return Visitor.merge(
-			variable_visitor(ctx),
-			// Function declarations — check the function name (if any).
+			make_variable_visitor(check_value, check_const),
+			make_function_visitor(check_value),
+			make_param_visitor(check_value),
+			make_catch_visitor(check_value),
+			make_object_prop_visitor(check_value),
+			make_class_visitor(check_type),
+			// Type aliases
 			Visitor.on(
-				'FunctionDeclaration',
-				(node: ESTree.Function): Effect.Effect<void> => check_binding_id(ctx, node.id, report_value)
+				'TSTypeAliasDeclaration',
+				(node: ESTree.TSTypeAliasDeclaration): Effect.Effect<void> =>
+					is_pascal_case(node.id.name)
+						? Effect.void
+						: ctx.report(
+								Diagnostic.make({ node: node as unknown as Ranged, message: TYPE_MESSAGE })
+							)
 			),
-			param_visitor(ctx),
-			catch_visitor(ctx),
-			object_prop_visitor(ctx),
-			// Class declarations — check class name.
+			// Interfaces
 			Visitor.on(
-				'ClassDeclaration',
-				(node: ESTree.Class): Effect.Effect<void> => check_binding_id(ctx, node.id, report_type)
-			),
-			type_alias_visitor(ctx),
-			interface_visitor(ctx)
+				'TSInterfaceDeclaration',
+				(node: ESTree.TSInterfaceDeclaration): Effect.Effect<void> =>
+					is_pascal_case(node.id.name)
+						? Effect.void
+						: ctx.report(
+								Diagnostic.make({ node: node as unknown as Ranged, message: TYPE_MESSAGE })
+							)
+			)
 		)
 	}
 })
