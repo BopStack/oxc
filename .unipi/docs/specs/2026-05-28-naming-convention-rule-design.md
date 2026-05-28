@@ -75,9 +75,9 @@ The rule enforces `PascalCase` for type-level names:
 - type aliases
 - interfaces
 - classes
-- enums
-- enum members if they are treated as type-like/static symbols by the AST shape
 - similar TypeScript declarations that introduce named types
+
+Enums are intentionally ignored in v1, including enum declarations and enum members.
 
 ### Ignored names
 
@@ -136,17 +136,17 @@ README docs must list the new rule and summarize the convention.
 
 ## Implementation Checklist
 
-- [ ] Add `src/naming_convention.ts` with rule metadata, case predicates, targeted visitors, and diagnostics.
-- [ ] Add `src/naming_convention.test.ts` covering failing local names and allowed imports/external shapes.
-- [ ] Wire `naming_convention` into `src/index.ts` as `bopstack/naming-convention`.
-- [ ] Update `README.md` to document the new rule and examples of enforced/ignored names.
-- [ ] Run required gates through `just`, including lint/build/vitest/e2e as available for this package.
+- [x] Add `src/naming_convention.ts` with rule metadata, case predicates, targeted visitors, and diagnostics.
+- [x] Add `src/naming_convention.test.ts` covering failing local names and allowed imports/external shapes.
+- [x] Wire `naming_convention` into `src/index.ts` as `bopstack/naming-convention`.
+- [x] Update `README.md` to document the new rule and examples of enforced/ignored names.
+- [x] Run required gates through `just`, including lint/build/vitest/e2e as available for this package.
 
 ## Open Questions
 
-- Should enum members be PascalCase, CONSTANT_CASE, or ignored? The initial design treats enum-like declarations as type/static symbols but should confirm the exact AST behavior before implementation.
-- Should class member names be enforced for all members, or only for members declared without quoted/computed keys?
-- Should JSX prop names be ignored as external/component API surfaces, or enforced when they are local component prop definitions? Initial design avoids member access and external shapes, but JSX-specific behavior needs implementation-time AST confirmation.
+- Resolved: enums are ignored completely in v1, including enum declarations and enum members.
+- Resolved: class/object members enforce declared identifier keys only; quoted and computed keys are ignored.
+- Resolved: JSX attributes are ignored as external/component API surfaces; local prop type/value declarations may still be enforced when they are ordinary supported declarations.
 
 ## Out of Scope
 
