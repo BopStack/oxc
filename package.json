@@ -1,12 +1,31 @@
 {
 	"name": "@bopstack/lint",
 	"version": "0.0.1",
-	"description": "",
-	"keywords": [],
+	"description": "Oxlint plugin for Bopstack project conventions — naming, inline styles, colors, test extensions, empty catches, and ts-ignore.",
+	"keywords": ["oxlint", "oxc", "lint", "bopstack", "javascript", "typescript", "naming-convention"],
 	"license": "MIT",
-	"author": "",
+	"author": "BopStack",
 	"type": "module",
 	"main": "dist/index.js",
+	"files": [
+		"dist",
+		"LICENSE",
+		"README.md"
+	],
+	"publishConfig": {
+		"access": "public"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/bopstack/lint.git"
+	},
+	"bugs": {
+		"url": "https://github.com/bopstack/lint/issues"
+	},
+	"homepage": "https://github.com/bopstack/lint#readme",
+	"engines": {
+		"node": ">=18"
+	},
 	"devDependencies": {
 		"@commitlint/types": "^21.0.1",
 		"@effect/vitest": "4.0.0-beta.70",
