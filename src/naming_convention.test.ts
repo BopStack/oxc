@@ -39,14 +39,18 @@ function var_decl(kind: string, name: string, init?: unknown): unknown {
 	}
 }
 
-function object_prop(key: string, value: string, computed = false): unknown {
+function object_prop(
+	key: string,
+	value: string,
+	opts?: { readonly computed?: boolean; readonly shorthand?: boolean }
+): unknown {
 	return {
 		type: 'Property',
 		kind: 'init',
 		key: { type: 'Identifier', name: key },
 		value: { type: 'Identifier', name: value },
-		computed,
-		shorthand: false,
+		computed: opts?.computed ?? false,
+		shorthand: opts?.shorthand ?? false,
 		method: false
 	}
 }
@@ -214,10 +218,10 @@ describe('naming_convention', () => {
 		expectDiagnostics(result, [{ message: 'Use snake_case for value names.' }])
 	})
 
-	test('fails camelCase local object property', () => {
+	test('fails camelCase shorthand object property', () => {
 		const result = runRule(naming_convention, 'ObjectExpression', {
 			type: 'ObjectExpression',
-			properties: [object_prop('myProp', 'myProp')]
+			properties: [object_prop('myProp', 'myProp', { shorthand: true })]
 		})
 		expectDiagnostics(result, [{ message: 'Use snake_case for value names.' }])
 	})
@@ -362,6 +366,14 @@ describe('naming_convention', () => {
 
 	// ---- IGNORED: quoted/computed keys ----
 
+	test('ignores object property keys for external shapes', () => {
+		const result = runRule(naming_convention, 'ObjectExpression', {
+			type: 'ObjectExpression',
+			properties: [object_prop('sourceType', 'source_type')]
+		})
+		expectNoDiagnostics(result)
+	})
+
 	test('ignores quoted object property keys', () => {
 		const result = runRule(naming_convention, 'VariableDeclaration', {
 			type: 'VariableDeclaration',
@@ -400,7 +412,7 @@ describe('naming_convention', () => {
 					id: binding_ident('obj'),
 					init: {
 						type: 'ObjectExpression',
-						properties: [object_prop('dynamicKey', 'dynamicKey', true)]
+						properties: [object_prop('dynamicKey', 'dynamicKey', { computed: true })]
 					}
 				}
 			]

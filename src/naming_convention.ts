@@ -91,12 +91,15 @@ function collect_binding_names(pattern: ESTree.BindingPattern): ReadonlyArray<st
 	return []
 }
 
-function extract_local_property_names(
+function extract_shorthand_property_names(
 	obj: ESTree.ObjectExpression
 ): ReadonlyArray<{ readonly name: string; readonly node: ESTree.Node }> {
 	const result: Array<{ name: string; node: ESTree.Node }> = []
 	for (const prop of obj.properties) {
 		if (prop.type !== 'Property') {
+			continue
+		}
+		if (!prop.shorthand) {
 			continue
 		}
 		if (prop.computed) {
@@ -186,7 +189,7 @@ function make_object_prop_visitor(check_value: CheckFn) {
 		'ObjectExpression',
 		(node: ESTree.ObjectExpression): Effect.Effect<void> =>
 			chain_all(
-				extract_local_property_names(node).map(({ name, node: prop_node }) =>
+				extract_shorthand_property_names(node).map(({ name, node: prop_node }) =>
 					check_value(name, prop_node)
 				)
 			)
