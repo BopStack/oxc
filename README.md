@@ -1,11 +1,13 @@
-# @bopstack/lint
+# @bopstack/oxc
+
+> ⚠️ **Note**: This package was previously named `@bopstack/lint` and has been renamed to `@bopstack/oxc`. The old `@bopstack/lint` package is deprecated. Please update your imports.
 
 Oxlint plugin for Bopstack project conventions.
 
 ## Installation
 
 ```sh
-pnpm add -D @bopstack/lint
+pnpm add -D @bopstack/oxc
 ```
 
 ## Usage
@@ -14,28 +16,28 @@ Add the plugin to your `.oxlintrc.json`:
 
 ```json
 {
-  "jsPlugins": ["./node_modules/@bopstack/lint/dist/index.js"],
-  "rules": {
-    "bopstack/naming-convention": "error",
-    "bopstack/no-inline-styles": "error",
-    "bopstack/no-hardcoded-colors": "error",
-    "bopstack/test-naming": "error",
-    "bopstack/no-empty-catch": "error",
-    "bopstack/no-ts-ignore": "error"
-  }
+	"jsPlugins": ["./node_modules/@bopstack/oxc/dist/index.js"],
+	"rules": {
+		"bopstack/naming-convention": "error",
+		"bopstack/no-inline-styles": "error",
+		"bopstack/no-hardcoded-colors": "error",
+		"bopstack/test-naming": "error",
+		"bopstack/no-empty-catch": "error",
+		"bopstack/no-ts-ignore": "error"
+	}
 }
 ```
 
 ## Rules
 
-| Rule | Description |
-|------|-------------|
-| `bopstack/naming-convention` | Enforce Bopstack naming: `snake_case` for value names, `snake_case` or `CONSTANT_CASE` for `const`, `PascalCase` for types/classes. Imports, enums, JSX attributes, member access, and non-shorthand object keys are ignored so external API shapes do not create false positives. |
-| `bopstack/no-inline-styles` | Report JSX `style={{ ... }}` attributes. |
-| `bopstack/no-hardcoded-colors` | Report literal hex, `rgb()`, `rgba()`, `hsl()`, and `hsla()` colors. |
-| `bopstack/test-naming` | Require `.test.ts` extension instead of `.spec.ts`. |
-| `bopstack/no-empty-catch` | Report empty `catch` blocks. |
-| `bopstack/no-ts-ignore` | Require `@ts-expect-error` instead of `@ts-ignore`. |
+| Rule                           | Description                                                                                                                                                                                                                                                                        |
+| ------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `bopstack/naming-convention`   | Enforce Bopstack naming: `snake_case` for value names, `snake_case` or `CONSTANT_CASE` for `const`, `PascalCase` for types/classes. Imports, enums, JSX attributes, member access, and non-shorthand object keys are ignored so external API shapes do not create false positives. |
+| `bopstack/no-inline-styles`    | Report JSX `style={{ ... }}` attributes.                                                                                                                                                                                                                                           |
+| `bopstack/no-hardcoded-colors` | Report literal hex, `rgb()`, `rgba()`, `hsl()`, and `hsla()` colors.                                                                                                                                                                                                               |
+| `bopstack/test-naming`         | Require `.test.ts` extension instead of `.spec.ts`.                                                                                                                                                                                                                                |
+| `bopstack/no-empty-catch`      | Report empty `catch` blocks.                                                                                                                                                                                                                                                       |
+| `bopstack/no-ts-ignore`        | Require `@ts-expect-error` instead of `@ts-ignore`.                                                                                                                                                                                                                                |
 
 ## Development
 
